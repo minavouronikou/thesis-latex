@@ -4,17 +4,21 @@
 %% You can process specific files by typing their names in at the 
 %% \files=
 %% prompt when you run the file main.tex through LaTeX.
-\chapter{2 GPU’s and Parallel Programming Models}
+\chapter{GPU’s and Parallel Programming Models}
 
 
 \section{Graphics Processing Units (GPU) Computing}
 Conventional central processing units (CPU) are reaching the limits for how high the clock frequencies can go. More and more cores are added on each GPU so as to achieve higher computational throughput. However, physical limitations and limitations on the circuit fabrication make more difficult the improvement of the clock speed of the CPU.
 
 As the CPU has been having trouble keeping its clock frequency growing and have added more cores to counterbalance this, the graphical processing units (GPU), which have always been parallel hardware made for real-time 3D renderings, have evolved into devices that may also be programmed and used for general-purpose computing like scientific computations. Specifically, GPU’s can run many threads in parallel that fulfill high computation demand and provide large memory bandwidth to serve parallel memory access requests.
-
 So it was created a new movement in the area of parallel programming called GPGPU, or General-Purpose computation on GPU. The importance of GPGPU technology is to provide heterogeneous computations where applications use both the CPU and GPU. Simply, it can increase the speed of applications with a large amount of data just by using the GPU as co-processors to CPU to accelerate its general purpose computations that was once only managed by the CPU alone. NVIDIA and ATI have been the main GPU manufacturers with a long list of different models and features. Both of these companies have been producing different platforms that can use parallel computing architectures to utilize the GPU’s stream processors to gain more speedup for any computing process. 
-
 In general, CPU systems are called multicore systems. They contain handful of strong cores, each supporting approximately 1 hardware thread. In contrary, GPU systems are called manycore systems containing many but “lighter” threads. There are two major differences between CPU and GPU threads. First, GPU’s have small caches but the context switching between threads is essentially fast so as to overlap memory access latency with useful computations. And second, GPU’s achieve high performance when thousands of threads execute in parallel while CPU’s need the number of threads per core to be small. 
+ \begin{figure}[H]
+    \centering
+        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{GPU.png}
+    \caption{GPU Architecture}
+    \label{fig:GPU}
+\end{figure}
 
 \section{NVIDIA's Kepler Architecture}
 In an attempt to interpret better the results, it seems necessary to explain the GPU architecture (Kepler GK110 architecture) used in this thesis and especially the GPU model (GTX Force 680) used for the development and the experiments.
@@ -24,7 +28,7 @@ NVIDIA’s Kepler architecture introduced to improve mainly 3D graphics quality 
  
  \begin{figure}[H]
     \centering
-        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{kepler.jpg}
+        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{kepler.png}
     \caption{Kepler Architecture}
     \label{fig:Kepler}
 \end{figure}
@@ -39,7 +43,7 @@ The SMX schedules threads in groups of 32 parallel threads called warps. Each SM
 
  \begin{figure}[H]
     \centering
-        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{warp_scheduler.jpg}
+        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{warp_scheduler.png}
     \caption{}
     \label{fig:warp_scheduler}
 \end{figure}
@@ -48,7 +52,7 @@ To improve performance Kepler introduced a new shuffle instruction, which allows
 
  \begin{figure}[H]
     \centering
-        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{memory_hieranchy.jpg}
+        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{memory_hieranchy.png}
     \caption{}
     \label{fig:warp_scheduler}
 \end{figure}
@@ -62,7 +66,7 @@ Compute Unified Device Architecture (CUDA) is a general purpose parallel computi
 CUDA C is an extension of C. Actually CUDA can be defined as C with a few keywords. The programmer defines functions, called kernels. Kernels are executed N times in parallel by N different CUDA threads and only access GPU memory. A kernel can be defined with the \_\_global\_\_ declaration specifier when launched from CPU. A kernel may be launched from another kernel using the \_\_device\_\_ declaration specifier. The programmer is able to define the number of CUDA threads that execute the kernel using the <<<…>>>execution configuration syntax. At each thread that executes the kernel is assigned a unique thread ID that can be referred to via the threadIdx variable. Threads managed in groups of 32, called warps. Instructions are issued per warp. If an operand is not ready the warp will stall. Computations can be performed in one-dimension, two-dimensions and three-dimensions. For that purpose, threadIdx is a 3-component vector (threadIdx.x, threadIdx.y, threadIdx.z). This provides a natural way to invoke computation across the elements in a domain such as a vector, matrix, or volume. The number of threads per block is limited, due to limited memory resources of the processor core, on which all threads per block within the block reside. In most cases the number of threads per block reflects the problem geometry. On current GPUs, threads per block are up to 1024 threads. Blocks do not migrate among processors, execute on one multiprocessor. Several blocks can execute concurrently on one multiprocessor. They are organized into a one-dimensional, two-dimensional, or three-dimensional grid of thread blocks as illustrated by Figure. The number of thread blocks in the grid usually results from the amount of data to be processed to the number of threads per block. 
  \begin{figure}[H]
     \centering
-        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{blocks.jpg}
+        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{blocks.png}
     \caption{}
     \label{fig:warp_scheduler}
 \end{figure}
@@ -76,7 +80,7 @@ In correspondence with the threads in the blocks, each block within the grid can
 
  \begin{figure}[H]
     \centering
-        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{grids.jpg}
+        \includegraphics[totalheight=0.5\textheight,width=0.7\textwidth]{grids.png}
     \caption{}
     \label{fig:warp_scheduler}
 \end{figure}

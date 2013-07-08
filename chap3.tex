@@ -16,6 +16,22 @@ where the coefficients A, B, C etc.  may depend upon x and y.
 If $(A^2+ B^2+C^2) >0$ over a region of the x-y plane, the PDE is second-order in that region. PDE's can be classified into elliptic, parabolic and hyperbolic equations. The classification is based in the discriminant $B^2 – 4AC$ as shown in Table 1. Parabolic equations, with the thermal conductivity equation as the most characteristic example, involve time dependency and describe diffusion. Hyperbolic equations, with the wave equation as the most standard example, are time dependent
 and describe dissemination phenomena. Unlike the previous, elliptic equations describe the static behavior of a magnitude in a particular area without time dependency. The most characteristic elliptical equation is the Laplace equation. Parabolic and hyperbolic equations are usually defined as initial value problems and elliptic equations as boundary value problems.
 
+\begin{table}[h!]
+    \begin{center}
+        \begin{tabular}{| l | l |}
+        \hline
+        Discriminant   & Type 	\\ \hline
+        $B^2 – 4AC < 0$   & Elliptic (e.g. Laplace Eq.) 	\\ \hline
+        $B^2  – 4AC = 0$  &	Parabolic (e.g. Heat Eq.)        \\ \hline
+        $B^2 – 4AC > 0$  & Hyperbolic (e.g. Wave Eq.) 	\\ \hline
+       
+        \end{tabular}
+    \end{center}
+
+    \caption{Classification of PDE's}
+    \label{table:trainingset}
+\end{table}
+
 
 
 Most frequently PDE's are solved using finite difference (FD), finite element (FE) and finite volume (FV) technique. The finite difference technique is implemented and mathematically analyzed more easily than the other techniques. The least popular is the finite volume approximation because it requires special mathematical knowledge in exchange for high accuracy results.
@@ -94,7 +110,7 @@ About discretization, the first step of solving PDE’s, it is shown in the figu
 
  \begin{figure}[H]
     \centering
-        \includegraphics[totalheight=0.4\textheight,width=0.9\textwidth]{review_conclusion.jpg}
+        \includegraphics[totalheight=0.4\textheight,width=0.9\textwidth]{review_conclusion.png}
     \caption{}
     \label{fig:warp_scheduler}
 \end{figure}
