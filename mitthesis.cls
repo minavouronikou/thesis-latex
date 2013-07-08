@@ -100,8 +100,8 @@
 %
 %%%% Parameters to initialize for boilerplate page:
 %
-%	\title{Mixed Circular Cylindrical Shells}
-% 	\author{J. Casey Salas}
+%	\title{Study and implementation of computational methods for Differential Equations in heterogeneous systems}
+% 	\author{Asimina Vouronikoy - Eleni Zisiou}
 % 	\prevdegrees{B.S., University of California (1978) \\
 %		     S.M., Massachusetts Institute of Technology (1981)}
 % 	\department{Department of Electrical Engineering and Computer Science}
@@ -435,7 +435,7 @@ reserved.\par\permission}}
 \newbox\@titlesupervisor 	\newbox\@abstractsupervisor
 
 \def\supervisor#1#2{\setbox\@titlesupervisor\vbox
-  {\unvbox\@titlesupervisor \vskip 10pt% plus 1fil minus 1fil
+  {\unvbox\@titlesupervisor \vskip 8pt% plus 1fil minus 1fil
   \def\baselinestretch{1}\large
   \signature{Certified by}{#1 \\ #2 \\ Thesis Supervisor}}
   \setbox\@abstractsupervisor\vbox{\unvbox\@abstractsupervisor
@@ -443,7 +443,7 @@ reserved.\par\permission}}
   \par\noindent Thesis Supervisor: #1 \\ Title: #2}}
 
 % department chairman, not thesis committee chairman
-\def\chairman#1#2{\gdef\@chairmanname{#1}\gdef\@chairmantitle{#2}}
+%\def\chairman#1#2{\gdef\@chairmanname{#1}\gdef\@chairmantitle{#2}}
 
 %% `upcase' documentclass option: \choosecase is defined either as a dummy or
 %% a macro to change the (expanded) argument to uppercase.
@@ -455,27 +455,27 @@ by\par
 \par
 \@prevdegrees
 \par
-\choosecase{Submitted to the} \choosecase{\@department} \\
-\choosecase{in partial fulfillment of the requirements for the}
-\choosecase{\@degreeword} 
-\choosecase{of}
-\par
-\choosecase{\@degree}
-\par
-at the
-\par\MIT\par
-\@degreemonth\ \@degreeyear
-\par
-\@copyrightnotice
-\par
-\vskip 3\baselineskip
-\signature{Author}{\@department \\ \@thesisdate}
+%\choosecase{Submitted to the} \choosecase{\@department} \\
+%\choosecase{in partial fulfillment of the requirements for the}
+%\choosecase{\@degreeword} 
+%\choosecase{of}
+%\par
+%\choosecase{\@degree}
+%\par
+%at the
+%\par\MIT\par
+%\@degreemonth\ \@degreeyear
+%\par
+%\@copyrightnotice
+%\par
+%\vskip 3\baselineskip
+%\signature{Author}{\@department \\ \@thesisdate}
 \par
 \vfill
 \unvbox\@titlesupervisor
 \par
 \vfill
-\signature{Accepted by}{\@chairmanname \\ \@chairmantitle}
+%\signature{Accepted by}{\@chairmanname \\ \@chairmantitle}
 \vfill
 \end{titlepage}}
 
@@ -489,9 +489,9 @@ by \\
 \par
 \def\baselinestretch{1}\@normalsize
 Submitted to the \@department \\
-on \@thesisdate, in partial fulfillment of the \\
-requirements for the \@degreeword\ of \\
-\@degree
+on \@thesisdate,\\
+%requirements for the \@degreeword\ of \\
+%\@degree
 \end{center}
 \par
 \begin{abstract}}
