@@ -117,3 +117,40 @@ About discretization, the first step of solving PDE’s, it is shown in the figu
 
 Finally, an important conclusion about all the above papers concerns the methods that were most implemented for solving linear systems. In the following table, it is presented for each work the discretization method, the equation and the solver that was implemented. Most popular methods are Parallel Cyclic Reduction (PCR), Conjugate gradient (CG) and Jacobi. 
 
+\begin{table}[t]
+    \begin{center}
+        \begin{tabular}{| l | p{4cm} | p{6cm} | p{6cm} |}
+        \hline
+        \#	& Discretization Method	& PDE equation 			 & Linear System Solver \\ \hline
+        1	& Finite Difference	& 3D heat diffusion equation &	Jacobi \\ \hline
+        2	& Finite Difference & 2D/3D Wave equation   	 &	- \\ \hline
+        3	& Finite Difference	& 2D parabolic PDE	    	 & -  \\ \hline
+        4	& -				    &	-						 & - \\ \hline
+        5	&"naïve algorithm", "cached plane sweep", "pipelined wavefront" &	-	&- \\ \hline
+        6	& Finite Difference	& the Cahn-Hilliard equation	& - \\ \hline
+        7	& Finite Difference & the parabolic convection diffusion equation 	&Parallel cyclic reduction \\ \hline
+        8	& Finite Difference	& focus on stochastic volatility models, the Hundsdorfer–Verwer scheme and the Douglas scheme	& ADI schemes \\ \hline
+        9	& Eigenanalysis	& directional anisotropic diffusion \& coherence enhancing diffusion &	Explicit Euler scheme and an iterative method(self implemented) \\ \hline
+        10	& Not Mentioning & -	& Hybrid tiled PCR \& p-Thomas  \\ \hline
+        11	& Finite Element & The cardiac monodomain model (non linear ODE's and parabolic linear PDE's) &	2nd order Crank-Nikolson (PDE) \& explicit Euler (ODE)  \\ \hline
+        12  & Finite Difference & the 2D wave equation \& the incompressible Navier-Stokes equations &	CG \& Gauss-Seidel\\ \hline
+       13	& operator splitting	& Reaction diffusion equation	& Forward Euler \\ \hline
+       14	& Finite Element and operator splitting	& the monodomain model	& Implicit and explicit solvers \\ \hline
+        15	& - &	-	& SPIKE algorithm ,parallel diagonal pivoting \& p-Thomas\\ \hline
+        16	& - &	Black-Scholes partial differential equation &	BiCGStab and CGS\\ \hline
+        17	& Finite Difference	& OceanWave3D model 	& Iterative methods\\ \hline
+        18	& - &	Helmholtz equation with Dirichlet and/or Neumann boundary conditions on the unit square &	CG and Multigrid  solvers\\ \hline
+       19	& Finite Element	& Poisson problem on isotropic and anisotropic domains	& Multigrid, Jacobi, Gauss-Seidel, Thomas(CPU) and parallel Cyclic Reduction(GPU) \\ \hline
+       20 &	- &	-	& CR,PCR,RD, Hybrid CR+PCR,CR+RD \\ \hline
+       21	&  Finite Difference	& the parabolic convection diffusion equation &	Parallel cyclic reduction\\ \hline
+        
+        \hline
+        \end{tabular}
+    \end{center}
+
+    \caption{conclusion table}
+    \label{table:concl}
+\end{table}
+
+
+
