@@ -20,4 +20,61 @@ In general large tridiagonal systems of linear equations appear in many numerica
 
 For example, the tridiagonal system:
 
-$a_i*x_{i-1} + b_i*x_i+c_i*x_{i+1} = F_{i} ,\t  i=1:1:n$
+$a_i*x_{i-1} + b_i*x_i+c_i*x_{i+1} = F_{i} ,\t  i=1:1:n$\\
+We assume that $n= 2^p - 1$. \\
+The algorithm proceeds in two steps: a forward reduction and a backward substitution. Each phase consists of ($log_2n – 1$) steps, where n is the system size. The first step in cyclic reduction is to combine linearly the equations in order to eliminate the odd numbered unknowns ($x_1$, $x_3$ … $x_n$). Next the unknowns are re-ordered and the process is continued until the system consists from one equation with one unknown. To do this the algorithm is based to triplets. In the above example in order to eliminate $x_1$ and $x_3$, we choose the first three equations of the system and multiply them by the parameters $\alpha_2$, $\beta_2$, $\gamma_2$. \\ \\
+$b_1*x_1+c_1*x_2= F_1$                         \hspace*{5cm}$*(\alpha_2)$\\
+$a_2*x_1+ b_2*x_2+c_2*x_3= F_2$                 \hspace*{3,3cm}$*(\beta_2)$ \\
+\hspace*{2cm}$a_3*x_2+ b_3*x_3+c_3*x_4= F_3$     \hspace*{1,3cm}$*(\gamma_2)$\\
+\\
+Subsequently we add the equations and we have the resulted equation. Similarly we continue this elimination process for the next three equations until we have only one equation.
+Using the back substitution we can find the unknown x from the last one equation and we can compute all the others x from the previous steps.
+As it is said a tridiagonal matrix has basically 3 diagonals, (super, main, sub). In order to take advantage of this, we can consider that the matrix is consisted from three vectors and store only these three vectors plus one vector for the right hand side of the system.
+If we consider that vector a is the sub-diagonal, vector c is the supper diagonal, vector b is the main diagonal and vector F is the right hand side, pseudo code for the forward elimination is given below:
+
+After the forward elimination the resulting system is one equation with one unknown. Hereafter, it is trivial to deduce the remaining unknowns. Formally the resulting solution can be calculated by following pseudo code:
+
+
+\subsection{Implementation Issues}
+
+The first goal was to run all the steps of CR on GPU. As we can understand from the pseudo code there are dependences between data during the outer for loop for both forward and backward step. 
+
+Subsequently, the first Kernel for forward elimination called in this way
+
+
+keeping as parameter the necessary step size. Step size, essentially, settles on the termination condition for the kernel. The dimension of the grid and the block are determined through the following function.
+
+
+
+In other words, the geometry changes while the size of the system is growing. 
+Likeness for the backward substitution step, it is determined the step size and the block dimension.
+Before the kernel’s launches, all vectors (three diagonals and one for the right side hand) are transferred from host to device using continuous CudaMemcpy(). It is also necessary to initialize to zero the resulting vector x using CudaMemSet(), because it takes parts to computations. Finally the result vector is transferred from the device to host.
+
+\section{Block Cyclic Reduction}
+
+
+The basic idea of the cyclic reduction method can be extended to block tridiagonal systems. The idea of the block cyclic reduction (BCR) was first introduced by Gene Golub to deal with the scalar tridiagonal systems that arise from the finite element discretization of the Poisson equation in 2D. As in cyclic reduction, block cyclic reduction is a two phase algorithm. It consists of forward reduction and backward substitution. During each step of the reduction stage, are eliminated approximately half the unknowns in the system. After $O(\log_2 n)$ reductions a $1x1$ block system is left. After solving this system, the previously eliminated unknowns are computed by back substitution. While this formulation is numerically unstable, O. Buneman suggested a stable variation.  In this thesis, we consider the case of block cyclic reduction, where the scalar elements of traditional cyclic reduction are replaced with matrix tridiagonal and diagonal blocks.
+
+\subsection{The algorithm}
+
+
+
+The implemented algorithm uses matrices in the following form:
+
+
+The pseudocode for the Buneman algorithm that was implemented goes as following: 
+
+
+
+/* Computation of Buneman Series */
+
+
+/* Forward Reduction */
+
+
+/* Backward substitution */
+
+
+\subsection{Implementation Issues}
+
+
