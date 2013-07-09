@@ -27,20 +27,12 @@ The algorithm proceeds in two steps: a forward reduction and a backward substitu
 \\
 $b_1*x_1+c_1*x_2= F_1$                        \hspace*{5cm} $*(\alpha_2)$	\\
 $a_2*x_1+ b_2*x_2+c_2*x_3= F_2$               \hspace*{3,3cm} $* (\beta_2)$  \\
-\hspace*{2cm}$a_3*x_2+ b_3*x_3+c_3*x_4= F_3$  \hspace*{1,3cm} $*(\gamma_2)$     \\
-
+\hspace*{2cm}$a_3*x_2+ b_3*x_3+c_3*x_4= F_3$  \hspace*{1,3cm} $*(\gamma_2)$     \\ \\
 Subsequently we add the equations and we have the resulted equation. Similarly we continue this elimination process for the next three equations until we have only one equation.
-Using the back substitution we can find the unknown x from the last one equation and we can compute all the others x from the previous steps.
-
+Using the back substitution we can find the unknown x from the last one equation and we can compute all the others x from the previous steps.\\
 As it is said a tridiagonal matrix has basically 3 diagonals, (super, main, sub). In order to take advantage of this, we can consider that the matrix is consisted from three vectors and store only these three vectors plus one vector for the right hand side of the system.
 If we consider that vector a is the sub-diagonal, vector c is the supper diagonal, vector b is the main diagonal and vector F is the right hand side, pseudo code for the forward elimination is given below: \\
-
 $a_i*x_{i-1} + b_i*x_i+c_i*x_{i+1} = F_{i}  ,   i=1:1:n$
-
-
-
-
-
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
 \Function{Forward Reduction}{}
@@ -61,9 +53,7 @@ $a_i*x_{i-1} + b_i*x_i+c_i*x_{i+1} = F_{i}  ,   i=1:1:n$
 \caption{Cyclic Reduction - Forward}
 \label{alg:forward_cr}
 \end{algorithm}
-
-After the forward elimination the resulting system is one equation with one unknown. Hereafter, it is trivial to deduce the remaining unknowns. Formally the resulting solution can be calculated by following pseudo code: 
-
+After the forward elimination the resulting system is one equation with one unknown. Hereafter, it is trivial to deduce the remaining unknowns. Formally the resulting solution can be calculated by following pseudo code:
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
 \Function{Backward Substitution (first step)}{}
@@ -101,7 +91,6 @@ After the forward elimination the resulting system is one equation with one unkn
 
 
 The first goal was to run all the steps of CR on GPU. As we can understand from the pseudo code there are dependences between data during the outer for loop for both forward and backward step. 
-
 Subsequently, the first Kernel for forward elimination called in this way
 \begin{algorithmic}
 \For {$i=\log_2(size+1)-2;i>=0;i--$}\\
@@ -125,8 +114,6 @@ keeping as parameter the necessary step size. Step size, essentially, settles on
 \caption{Block Dimension}
 \label{alg:calc_dim}
 \end{algorithm}
-
-
 In other words, the geometry changes while the size of the system is growing. 
 Likeness for the backward substitution step, it is determined the stepsize and the block dimension.
 Before the kernel’s launches, all vectors (three diagonals and one for the right side hand) are transferred from host to device using continuous CudaMemcpy(). It is also necessary to initialize to zero the resulting vector x using CudaMemSet(), because it takes parts to computations. Finally the result vector is transferred from the device to host.
@@ -137,14 +124,36 @@ The basic idea of the cyclic reduction method can be extended to block tridiagon
 
 \subsection{The algorithm}
 
-The implemented algorithm uses matrices in the following form:\\
-
+The implemented algorithm solves systems of the following form:
+ $A*U = F$\\  
+where the \emph{A} is a block tridiagonal matrix: 
+\[ \left( \begin{array}{ccccc}
+B  & T &     &   &\\
+T  & B &  T  &    &\\
+   & T &  B  & T  &\\
+   &   & ...    &    &  \\     
+   &   &     & ...  &  \\
+   &   &  T  & B & T \\    
+   &   &     & B & T\\	
+    \end{array} \right)\] 
 where B is a tridiagonal matrix. For example a typical tridiagonal matrix arising from 
-Poisson discretization is    
-
+Poisson discretization is : \\
+the \emph{B Matrix}
+\[ \left( \begin{array}{ccc}
+-4 & 1 &  \\
+1  & -4 & -1 \\
+   & -1 & -4 \end{array} \right)\] 
+and T is either the \emph{Identical Matrix}
+\[ \left( \begin{array}{ccc}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \end{array} \right)\] or The \emph{-Identical Matrix}
+\[ \left( \begin{array}{ccc}
+-1 & 0 & 0 \\
+0 & -1 & 0 \\
+0 & 0 & -1 \end{array} \right)\] 
+\\
 The pseudocode for the Buneman algorithm that was implemented goes as following: 
-
-
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
 \Function{Buneman}{}
