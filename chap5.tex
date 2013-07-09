@@ -1,0 +1,41 @@
+%% This is an example first chapter.  You should put chapter/appendix that you
+%% write into a separate file, and add a line \include{yourfilename} to
+%% main.tex, where `yourfilename.tex' is the name of the chapter/appendix file.
+%% You can process specific files by typing their names in at the 
+%% \files=
+%% prompt when you run the file main.tex through LaTeX.
+\chapter{}
+
+
+The implemented algorithm uses matrices in the following form:
+
+the \emph{ }
+\[ \left( \begin{array}{ccccc}
+B  & T &     &   &\\
+T  & B &  T  &    &\\
+   & T &  B  & T  &\\
+   &   & ...    &    & \\
+   &   &     & ...  &  \\
+   &   &  T  & B & T \\    
+   &   &     & B & T\\	
+    \end{array} \right)\] 
+
+where B is a tridiagonal matrix. For example a typical tridiagonal matrix arising from 
+Poisson discretization is : \\
+the \emph{B Matrix}
+\[ \left( \begin{array}{ccc}
+-4 & 1 &  \\
+1  & -4 & -1 \\
+   & -1 & -4 \end{array} \right)\] 
+   
+and T is either the \emph{Identical Matrix}
+\[ \left( \begin{array}{ccc}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \end{array} \right)\] or The \emph{-Identical Matrix}
+\[ \left( \begin{array}{ccc}
+-1 & 0 & 0 \\
+0 & -1 & 0 \\
+0 & 0 & -1 \end{array} \right)\] 
+
+
