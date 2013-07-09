@@ -20,6 +20,7 @@ In general large tridiagonal systems of linear equations appear in many numerica
 
 For example, the tridiagonal system:
 
+<<<<<<< HEAD
 $a_i*x_{i-1} + b_i*x_i+c_i*x_{i+1} = F_{i}$  , \hspace*{2cm} $ i=1:1:n$
 
 We assume that $n= 2^p - 1$. 
@@ -34,10 +35,17 @@ Using the back substitution we can find the unknown x from the last one equation
 
 As it is said a tridiagonal matrix has basically 3 diagonals, (super, main, sub). In order to take advantage of this, we can consider that the matrix is consisted from three vectors and store only these three vectors plus one vector for the right hand side of the system.
 If we consider that vector a is the sub-diagonal, vector c is the supper diagonal, vector b is the main diagonal and vector F is the right hand side, pseudo code for the forward elimination is given below: \\
+=======
+$a_i*x_{i-1} + b_i*x_i+c_i*x_{i+1} = F_{i}  ,   i=1:1:n$
+
+
+
+>>>>>>> aba71db6a3a0f3f34471b0888bb73b0cb61b86b9
 
 
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
+<<<<<<< HEAD
 \Function{Forward Reduction}{}
 \State{for$(i=0;  i<\log_2(size+1)-1; i++)$\{}
 	 \State{\hspace*{1cm}for$(j=2^{i+1}-1; j<size; j=j+2^{i+1})$\{}
@@ -183,3 +191,17 @@ The pseudocode for the Buneman algorithm that was implemented goes as following:
 \label{alg:Buneman_bcr}
 \end{algorithm}
 
+=======
+\Function{forward Reduction}{}
+\State{for(i=0; i<$log_2(size+1)$-1;i++)\{ }
+\State{for(j=pow(2,i+1)-1;j<size;j=j+pow(2,i+1))\{ }
+    \State{$vq_i = $ codebook index with minimum distance from subblock;}
+    \State{Replace dxd residuals with codebook[$vq_i$] data;}
+    \State{Store $vq_i$ for subblock;}
+\EndFor
+\EndFunction
+\end{algorithmic}
+\caption{VQ Algorithm}
+\label{alg:quantmb}
+\end{algorithm}
+>>>>>>> aba71db6a3a0f3f34471b0888bb73b0cb61b86b9
