@@ -1,0 +1,23 @@
+%% This is an example first chapter.  You should put chapter/appendix that you
+%% write into a separate file, and add a line \include{yourfilename} to
+%% main.tex, where `yourfilename.tex' is the name of the chapter/appendix file.
+%% You can process specific files by typing their names in at the 
+%% \files=
+%% prompt when you run the file main.tex through LaTeX.
+\chapter{Implementation}
+
+\section{Cyclic Reduction}
+
+
+Cyclic reduction (CR) is an algorithm invented by G. H. Golub and R. W. Hoekney [1] in the mid 1960s for solving linear systems related to the finite difference discretization of the Poisson equation over a rectangle. 
+The basic idea of the CR algorithm is to eliminate half the unknowns, regroup the equations in even and odd numbered and again eliminate half the unknowns.
+
+
+\subsection{The algorithm}
+
+CR method only applies to matrices that can be represented as a (block) Toeplitz matrix; such problems often arise in implicit solutions for partial differential equations on a lattice. For example fast solvers for Poisson's equation express the problem as solving a tridiagonal matrix, discretising the solution on a regular grid. For example from 1D Poisson’s equation we have a tridiagonal matrix system while from 2D Poisson’s equation we have a block tridiagonal system.
+In general large tridiagonal systems of linear equations appear in many numerical analysis applications. A tri-diagonal matrix is a matrix which only has values in the sub-, main- and super-diagonal.
+
+For example, the tridiagonal system:
+
+$a_i*x_{i-1} + b_i*x_i+c_i*x_{i+1} = F_{i} ,\t  i=1:1:n$
