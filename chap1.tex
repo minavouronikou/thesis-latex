@@ -6,5 +6,9 @@
 %% prompt when you run the file main.tex through LaTeX.
 \chapter{Introduction}
 
+Tridiagonal solvers are tools of high importance in wide range of engineering and scientific applications. Some applications of tridiagonal solvers include computer graphics,financial applications, fluid dynamics, Poisson solvers, preconditioner in iterative solvers and cubic spline calculation. Recent technological evolution of GPUs has lifted many scientific and engineering applications to a level that was only possible with room-sized supercomputers in the past. 
+
+There are various methods solving tridiagonal systems such as Thomas algorithm , cyclic reduction method , recursive doubling etc. Some of them exploit parallelism and a lot of research has been made over the years in order to improve their performance.
+
 This thesis is organized as follows.Chapter two provides an introduction to GPU computing and all the necessary background information in NVIDIA’s CUDA programming model. Chapter three is a review of solving partial differential equation on GPU’s is presented. Specifically this chapter gives a summary of the related work that is done in the field of stencil computation and PDE’s solving on GPU’s. Chapter four describes our implementations and optimizations. Two methods were implemented and ported on GPU, cyclic reduction (CR) that solves tridiagonal linear systems and block cyclic reduction (BCR) that solves block tridiagonal linear systems. In the last chapter five, the performance comparison, the results of the experiments performed and the concluding remarks are demonstrated.
 

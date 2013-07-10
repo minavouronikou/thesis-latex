@@ -9,28 +9,36 @@
 \section{Cyclic Reduction}
 
 
-Cyclic reduction (CR) is an algorithm invented by G. H. Golub and R. W. Hoekney [1] in the mid 1960s for solving linear systems related to the finite difference discretization of the Poisson equation over a rectangle. 
-The basic idea of the CR algorithm is to eliminate half the unknowns, regroup the equations in even and odd numbered and again eliminate half the unknowns.
+Cyclic reduction (CR) is an algorithm introduced by G. H. Golub and R. W. Hoekney [1] in the mid 1960s for solving tridiagonal linear systems related to the finite difference discretization of the Poisson equation over a rectangle. 
+The basic idea of the CR algorithm , also called odd-even reduction, is to eliminate half the unknowns, regroup the equations in even and odd numbered and again eliminate half the unknowns.
 
 
 \subsection{The algorithm}
 
-CR method only applies to matrices that can be represented as a (block) Toeplitz matrix; such problems often arise in implicit solutions for partial differential equations on a lattice. For example fast solvers for Poisson's equation express the problem as solving a tridiagonal matrix, discretising the solution on a regular grid. For example from 1D Poisson’s equation we have a tridiagonal matrix system while from 2D Poisson’s equation we have a block tridiagonal system.
-In general large tridiagonal systems of linear equations appear in many numerical analysis applications. A tri-diagonal matrix is a matrix which only has values in the sub-, main- and super-diagonal.
+CR method only applies to matrices that can be represented as a (block) Toeplitz matrix; such problems often arise in implicit solutions for partial differential equations on a lattice. For example fast solvers for Poisson's equation express the problem as solving a tridiagonal matrix, discretising the solution on a regular grid. From 1D Poisson’s equation arises a tridiagonal matrix system while from 2D Poisson’s equation arises a block tridiagonal system.
+In general large tridiagonal systems of linear equations appear in many numerical analysis applications. A tri-diagonal matrix is a matrix with values only in the sub-, main- and super-diagonal.
 
 For example, the tridiagonal system:
 
 $a_i*x_{i-1} + b_i*x_i+c_i*x_{i+1} = F_{i}$  , \hspace*{2cm} $ i=1:1:n$
 
-We assume that $n= 2^p - 1$. 
-The algorithm proceeds in two steps: a forward reduction and a backward substitution. Each phase consists of ($\log_2n – 1$) steps, where n is the system size. The first step in cyclic reduction is to combine linearly the equations in order to eliminate the odd numbered unknowns ($x_1$, $x_3$ … $x_n$). Next the unknowns are re-ordered and the process is continued until the system consists from one equation with one unknown. To do this the algorithm is based to triplets. In the above example in order to eliminate $x_1$ and $x_3$, we choose the first three equations of the system and multiply them by the parameters $\alpha_2$, $\beta_2$, $\gamma_2$. \\
+Assume that $n= 2^p - 1$. 
+The algorithm proceeds in two steps: a forward reduction and a backward substitution. Each phase consists of ($\log_2n – 1$) steps, where n is the system size. The first step in cyclic reduction is to combine linearly the equations in order to eliminate the odd numbered unknowns ($x_1$, $x_3$ … $x_n$). Next the unknowns are re-ordered and the process is continued until the system consists from one equation with one unknown. To do this the algorithm is based to triplets. In the above example in order to eliminate $x_1$ and $x_3$,the first three equations of the system are chosen and multiplied by the parameters $\alpha_2$, $\beta_2$, $\gamma_2$. \\
 \\
 $b_1*x_1+c_1*x_2= F_1$                        \hspace*{5cm} $*(\alpha_2)$	\\
 $a_2*x_1+ b_2*x_2+c_2*x_3= F_2$               \hspace*{3,3cm} $* (\beta_2)$  \\
 \hspace*{2cm}$a_3*x_2+ b_3*x_3+c_3*x_4= F_3$  \hspace*{1,3cm} $*(\gamma_2)$     \\ \\
-Subsequently we add the equations and we have the resulted equation. Similarly we continue this elimination process for the next three equations until we have only one equation.
-Using the back substitution we can find the unknown x from the last one equation and we can compute all the others x from the previous steps.\\
-As it is said a tridiagonal matrix has basically 3 diagonals, (super, main, sub). In order to take advantage of this, we can consider that the matrix is consisted from three vectors and store only these three vectors plus one vector for the right hand side of the system.
+Subsequently the equations are summed and we have the resulted equation. Similarly this elimination process proceeds for the next three equations, until we have only one equation.
+Using the back substitution the unknown x can be calculated from the last one equation and  all the others $x_i$ can be found  from the previous steps .The described steps can be illustrated in Figure 4-1.\\
+
+
+\begin{figure}[h]
+   \centering
+       \includegraphics[width=0.5\textwidth]{cr}
+   \caption{cr method}
+   \label{fig:gpuarch}
+\end{figure}
+As it is said a tridiagonal matrix has basically 3 diagonals, (super, main, sub). In order to take advantage of this, we can consider that the matrix consists from three vectors and store only these three vectors plus one vector for the right hand side of the system.
 If we consider that vector a is the sub-diagonal, vector c is the supper diagonal, vector b is the main diagonal and vector F is the right hand side, pseudo code for the forward elimination is given below: \\
 $a_i*x_{i-1} + b_i*x_i+c_i*x_{i+1} = F_{i}  ,   i=1:1:n$
 \begin{algorithm}[H]
@@ -153,16 +161,26 @@ and T is either the \emph{Identical Matrix}
 0 & -1 & 0 \\
 0 & 0 & -1 \end{array} \right)\] 
 \\
+
+The concept of block cyclic reduction is to iteratively eliminate half of the unknowns until there is an only single
+block system which can be solved directly. 
+So we have for such as : $1 < j < 2^jq -1$\\
+$TU_{2*j-2} + BU_{2*j-1}+ TU_{2*j} = F_{2*j-1}$ \\
+\hspace*{1cm} $TU_{2*j-1} + BU_{2*j}+ TU_{2*j+1} = F_{2*j}$ \\
+\hspace*{2cm}$TU_{2*j} + BU_{2*j+1}+ TU_{2*j+2} = F_{2*j+1}$\\\\
+By multiplying the first and third equations by T and the second equation by –B , and add the three equations, if $TB = BT$ we eliminate the odd unknowns $U_{2*j-1}$ :\\
+$T^2U_{2*j-2} + (2T^2 - B^2)U_{2*j} + T^2U_{2*j+2} = TF_{2*j-1} -BF_{2*j} + TF_{2*j+1}$ \\
+We have then the same structure for this new linear system with half of the unknowns. If this procedures continues for 
+k steps until $k = jq-1$ then we have only one block equation in the system :
+$B^{(jq-1)}U_{2^{jq-1}} = F^{(jq-1)}_{2^{jq-1}}$\\
+After solving the one block equation,by solving the linear system, the backward substitution phase begins.So after the even values were computed in the previous step , the « odd » values are now calculated.
 The pseudocode for the Buneman algorithm that was implemented goes as following: 
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
 \Function{Buneman}{}
-	\State{$ N = size$} 		         
-	\State{$jq=\log_2(N+1);$} 	     
-	\State{$P = zeros(N, N, jq);$}	
-	\State{$Q = zeros(N, N, jq);$}    
-	\State{$U = zeros(N,N);$}  	     
-	\State{$F=ones(N,N);$}  
+	\State{$ N = size$, $jq=\log_2(N+1);$} 	     
+	\State{$P = zeros(N, N, jq)$, $Q = zeros(N, N, jq);$}    
+	\State{$U = zeros(N,N)$, $F=ones(N,N);$}  
 	\State{For$(j=1:1:2^{jq}-1)$}
 	\State{$Q(j,:)^{(0)} = F(j,:)^{(0)};$}  	  
 	\State{$P(j,:)^{(0)} = 0;$} 
@@ -177,8 +195,6 @@ The pseudocode for the Buneman algorithm that was implemented goes as following:
 	\State{End For}    
 	\State{$pointer=2^{jq-2^{(jq-1)}};$}
 	\State{$U_{pointer}=[B^{-1}]^{jq-1}*Q_{pointer}^{(jq)}+Q_{pointer}^{(jq)};$}
-
-	/*Backward*/
 	\State{For$(k=jq-1:-1:1)$}
 	\State{\hspace*{1cm}For$(j=2:1:2^{jq-k}-1)$}
 	\State{$pointer=2^{k}*j-2^{(k-1)};$}
